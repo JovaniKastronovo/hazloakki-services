@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: servicio-analitica
+  selector:
+    # Esta etiqueta la usa k8s para buscar el pod
+    # al que le enviara el trafico. Un error aqui 
+    # hara que no funcione el ruteo.
+    app: servicio-analitica
+  ports:
+  - protocol: TCP
+    port: 8090
+    targetPort: 8090
+
+    
+

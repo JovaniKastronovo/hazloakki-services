@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: servicio-ofertas
+  spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: servicio-ofertas
+        tier: backend
+    spec:
+      containers:
+        - name: servicio-ofertas
+          image: jovaniac/ofertas-microservice:0.0.1-snapshot
+          ports:
+            - containerPort: 8089
+              protocol: TCP

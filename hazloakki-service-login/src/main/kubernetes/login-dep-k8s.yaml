@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: login-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: login
+        tier: backend
+    spec:
+      containers:
+      - name: login
+        image: jovaniac/login-microservice:0.0.1-SNAPSHOT
+        ports:
+      - containerPort: 8087

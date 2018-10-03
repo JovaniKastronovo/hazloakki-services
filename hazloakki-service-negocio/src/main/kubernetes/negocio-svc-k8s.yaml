@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: negocio-microservice
+spec:
+  ports:
+  - port: 8086
+    targetPort: 8086
+  selector:
+    app: negocio-microservice
+    tier: backend
+---

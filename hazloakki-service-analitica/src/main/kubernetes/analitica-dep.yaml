@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: servicio-analitica
+  labels:
+    app: servicio-analitica
+spec:
+  selector:
+    matchLabels:
+      app: servicio-analitica
+  template:
+    metadata:
+      labels:
+        app: servicio-analitica
+    spec:
+      containers:
+        - name: servicio-analitica
+          image: jovaniac/analitica-microservice:0.0.1-snapshot
+          ports:
+            - containerPort: 8090
+              protocol: TCP
