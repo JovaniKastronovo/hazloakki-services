@@ -16,7 +16,9 @@ CREATE TABLE negocio (
   numero_exterior varchar(45) DEFAULT NULL,
   horario varchar(45) DEFAULT NULL,
   responsable varchar(45) DEFAULT NULL,
-  id_cuenta varchar(255) DEFAULT NULL
+  id_cuenta varchar(255) DEFAULT NULL,
+  id_accion NUMERIC,
+  sitio_web varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE cat_metodo_pago (
