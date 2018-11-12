@@ -2,8 +2,6 @@ package com.hazloakki.negocio.repository;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 import com.hazloakki.negocio.modelo.NegocioDto;
 
 /**
@@ -20,4 +18,7 @@ public interface NegocioRepository {
 	List<NegocioDto> findByIdCuentaAndEstatus(String idCuenta, boolean estatus);
 	void actualizarByIdNegocio(String idNegocio, NegocioDto negocioDto);
 	void eliminarByIdNegocio(String idNegocio);
+	List<NegocioDto> obtenerNegociosByIdAccionAndEstatus(Integer idAccion, boolean estatus);
+	List<NegocioDto> findAllNegociosByEstatus(boolean estatus);
+	List<NegocioDto> findAllNegociosByNearbyAndEstatusAndHorario(double latitudActual, double longitudActual,double radio, boolean estatus);
 }

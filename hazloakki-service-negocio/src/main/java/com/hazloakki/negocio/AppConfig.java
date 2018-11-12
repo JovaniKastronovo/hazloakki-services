@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan
 @EnableTransactionManagement
-//@PropertySource(value = { "classpath:application.properties" })
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 	@Autowired

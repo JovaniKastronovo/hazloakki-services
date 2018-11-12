@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import com.hazloakki.negocio.modelo.NegocioDto;
 import com.hazloakki.negocio.persist.SpringJdbcDao;
+
 @Repository
 public class NegocioRepositoryImpl extends SpringJdbcDao implements NegocioRepository {
 
 	private String qryInsert = "INSERT INTO negocio (id_negocio,nombre,id_categoria,email,descripcion,telefono,"
 			+ " domicilio,latitud,longitud,estatus,codigo_postal,delegacion,colonia,calle,"
-			+ " numero_exterior,horario,responsable,id_cuenta) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ " numero_exterior,horario,responsable,id_cuenta,id_accion,sitio_web) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	private String qrySelectNegocio = "select * from negocio where id_negocio = ?";
 
@@ -24,7 +25,23 @@ public class NegocioRepositoryImpl extends SpringJdbcDao implements NegocioRepos
 			+ "  delegacion = ?, colonia = ?, calle = ? , numero_exterior = ?,  horario = ? , responsable = ? WHERE ID_NEGOCIO = ?";
 
 	private String qryDeleteNegocio = "DELETE FROM negocio WHERE ID_NEGOCIO = ?";
-
+	private String qrySelectNegociosByAccionAndEstatus = "SELECT * FROM negocio WHERE ID_ACCION=? AND ESTATUS = ?";
+	private String qryAllNegocios = "SELECT * FROM negocio WHERE ESTATUS = ?";
+	
+	private String qryNegociosCercanos="select a.*,b.distancia from " + 
+			"	(SELECT * FROM negocio a) as a, " + 
+			"	(SELECT b.id_negocio,(6371 * acos( cos( radians(?) ) * " + 
+			"		cos( radians( latitud ) ) * " + 
+			"		cos( radians( longitud ) - " + 
+			"		radians(?) ) + " + 
+			"		sin( radians(?) ) * " + 
+			"		sin( radians( latitud ) ))) / 10 as distancia " + 
+			"	from negocio b) as b "+ 
+			"where a.id_negocio = b.id_negocio " + 
+			" and a.ESTATUS = ? "+  
+			"and distancia < ? " + 
+			"order by b.distancia asc ";
+	
 	@Override
 	public String guardar(NegocioDto negocioDto) {
 
@@ -35,21 +52,21 @@ public class NegocioRepositoryImpl extends SpringJdbcDao implements NegocioRepos
 				negocioDto.getLatitud(), negocioDto.getLongitud(), negocioDto.isEstatus(), negocioDto.getCodigoPostal(),
 				negocioDto.getDelegacion(), negocioDto.getColonia(), negocioDto.getCalle(),
 				negocioDto.getNumeroExterior(), negocioDto.getHorario(), negocioDto.getResponsable(),
-				negocioDto.getIdCuenta());
+				negocioDto.getIdCuenta(), negocioDto.getIdAccion(), negocioDto.getSitioWeb());
 
 		return negocioDto.getIdNegocio();
 	}
 
 	@Override
 	public NegocioDto findById(String idNegocio) {
-		
+
 		try {
 			return jdbcTemplate.queryForObject(qrySelectNegocio, new Object[] { idNegocio },
-					BeanPropertyRowMapper.newInstance(NegocioDto.class));	
+					BeanPropertyRowMapper.newInstance(NegocioDto.class));
 		} catch (EmptyResultDataAccessException e) {
 			return null;
-		}		
-		
+		}
+
 	}
 
 	@Override
@@ -70,7 +87,28 @@ public class NegocioRepositoryImpl extends SpringJdbcDao implements NegocioRepos
 
 	@Override
 	public void eliminarByIdNegocio(String idNegocio) {
-		jdbcTemplate.update(qryDeleteNegocio,idNegocio);
+		jdbcTemplate.update(qryDeleteNegocio, idNegocio);
+	}
+
+	@Override
+	public List<NegocioDto> obtenerNegociosByIdAccionAndEstatus(Integer idAccion, boolean estatus) {
+
+		return jdbcTemplate.query(qrySelectNegociosByAccionAndEstatus, new Object[] { idAccion, estatus },
+				BeanPropertyRowMapper.newInstance(NegocioDto.class));
+	}
+
+	@Override
+	public List<NegocioDto> findAllNegociosByEstatus(boolean estatus) {
+		return jdbcTemplate.query(qryAllNegocios, new Object[] { estatus },
+				BeanPropertyRowMapper.newInstance(NegocioDto.class));
+	}
+
+	@Override
+	public List<NegocioDto> findAllNegociosByNearbyAndEstatusAndHorario(double latitudActual, double longitudActual,
+			 double radio, boolean estatus) {
+		
+		 return jdbcTemplate.query(qryNegociosCercanos, new Object[] { latitudActual,longitudActual,latitudActual,estatus,radio},
+				BeanPropertyRowMapper.newInstance(NegocioDto.class));
 	}
 
 }

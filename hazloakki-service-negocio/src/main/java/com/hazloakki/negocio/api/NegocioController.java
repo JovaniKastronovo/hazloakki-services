@@ -31,7 +31,12 @@ import com.hazloakki.negocio.service.remotos.OfertaDto;
 public class NegocioController {
 	
 	@Autowired
-	private NegocioService cuentaService;
+	private NegocioService negocioService;
+	
+	@GetMapping
+	public List<NegocioDto> obtenerTodosLosNegocios(){
+		return negocioService.obtenerAllNegocios();
+	}
 	
 	/**Obtencion de un negocio por su ID
 	 * @param idNegocio
@@ -39,7 +44,7 @@ public class NegocioController {
 	 */
 	@GetMapping("/{id}")
 	public NegocioDto redNegocio(@PathVariable("id") String idNegocio) {
-		return cuentaService.obtenerNegocio(idNegocio);
+		return negocioService.obtenerNegocio(idNegocio);
 	}
 	
 	
@@ -51,7 +56,7 @@ public class NegocioController {
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public NegocioDto crearNegocio(@RequestBody NegocioDto negocioDto) {
-		return cuentaService.guardarNegocio(negocioDto);
+		return negocioService.guardarNegocio(negocioDto);
 		
 	}
 	
@@ -62,7 +67,7 @@ public class NegocioController {
 	 */
 	@PutMapping("/{id}")
 	public NegocioDto modificaNegocio(@PathVariable("id") String idNegocio,@RequestBody NegocioDto cuentaDto) {
-		return cuentaService.modificaNegocio(idNegocio, cuentaDto);
+		return negocioService.modificaNegocio(idNegocio, cuentaDto);
 	}
 	
 	/**
@@ -71,9 +76,22 @@ public class NegocioController {
 	 */
 	@DeleteMapping("/{id}")
 	public void borrarNegocio(@PathVariable("id") String idNegocio) {
-		cuentaService.borrarNegocio(idNegocio);
+		negocioService.borrarNegocio(idNegocio);
 	}
-
+	
+	/*
+	 * App HazloAkki
+	 */
+	@GetMapping("acciones/{id}")
+	public List<NegocioDto> obtenerNegociosPorAccion(@PathVariable("id") String idAccion){
+		return negocioService.obtenerNegociosByAccion(Integer.parseInt(idAccion));
+	}
+	
+	@GetMapping("/{latitud}/{longitud}/{distancia}")
+	public List<NegocioDto> obtenerNegociosCercanos(@PathVariable ("latitud")String latitud, @PathVariable ("longitud")String longitud,@PathVariable ("distancia") String radio) {
+		return negocioService.obtenerNegociosByNearby(Double.parseDouble(latitud), Double.parseDouble(longitud),
+				Double.parseDouble(radio));
+	}
 	
 	/*
 	 * Solicitud de servicios Remotos
@@ -87,12 +105,12 @@ public class NegocioController {
 	 */
 	@GetMapping("/cuenta/{id}")
 	public List<NegocioDto> readAllNegocios(@PathVariable("id") String idCuenta) {
-		return cuentaService.obtenerAllNegociosByCuenta(idCuenta);
+		return negocioService.obtenerAllNegociosByCuenta(idCuenta);
 	}
 	
 	@GetMapping("/{id}/ofertas")
 	public List<OfertaDto> obtenerOfertas(@PathVariable("id")String idNegocio){
-		return cuentaService.obtenerAllOfertasByNegocio(idNegocio);
+		return negocioService.obtenerAllOfertasByNegocio(idNegocio);
 	}
 		
 }

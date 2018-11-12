@@ -6,8 +6,8 @@ CREATE TABLE negocio (
   descripcion varchar(45) DEFAULT NULL,
   telefono varchar(45) DEFAULT NULL,
   domicilio varchar(45) DEFAULT NULL,
-  latitud varchar(45) DEFAULT NULL,
-  longitud varchar(45) DEFAULT NULL,
+  latitud double precision DEFAULT NULL,
+  longitud double precision DEFAULT NULL,
   estatus BOOLEAN NOT NULL DEFAULT FALSE,
   codigo_postal varchar(45) DEFAULT NULL,
   delegacion varchar(45) DEFAULT NULL,
@@ -95,6 +95,32 @@ CREATE TABLE cat_categoria_negocios (
 
 INSERT INTO cat_categoria_negocios (id_categoria,nombre,descripcion,estatus,fecha) VALUES (1,'restaurante','restaurante de mariscos',true,'2018-07-07');
 INSERT INTO cat_categoria_negocios (id_categoria,nombre,descripcion,estatus,fecha) VALUES (2,'hotel','hotel 5 estrellas',true,'2018-07-07');
+
+CREATE TABLE cat_dias(
+id_dia NUMERIC PRIMARY KEY,
+nombre varchar(255) DEFAULT NULL,
+descripcion varchar(255) DEFAULT NULL,
+estatus BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(1,'lunes','lunes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(2,'martes','martes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(3,'miercoles','miercoles',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(4,'jueves','jueves',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(5,'viernes','viernes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(6,'sabado','sabado',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(7,'domingo','domingo',true);
+
+
+CREATE TABLE negocio_horario(
+id_negocio VARCHAR(255),
+id_dia NUMERIC,
+horario_inicial varchar(255) DEFAULT NULL,
+horario_final varchar(255) DEFAULT NULL,
+estatus BOOLEAN NOT NULL DEFAULT FALSE,
+FOREIGN KEY (id_negocio) REFERENCES negocio (id_negocio),
+FOREIGN KEY (id_dia) REFERENCES cat_dias (id_dia)
+);
 
 
 

@@ -10,17 +10,27 @@ import com.hazloakki.negocio.modelo.NegocioDto;
  *
  */
 import com.hazloakki.negocio.service.remotos.OfertaDto;
+
 public interface NegocioService {
 
-	NegocioDto guardarNegocio(NegocioDto cuentaDto);
-	NegocioDto obtenerNegocio(String idNegocio);
-	NegocioDto modificaNegocio(String idNegocio,NegocioDto cuentaDto);
-	void borrarNegocio(String idNegocio);
+	List<NegocioDto> obtenerAllNegocios();
 	
+	NegocioDto guardarNegocio(NegocioDto cuentaDto);
+
+	NegocioDto obtenerNegocio(String idNegocio);
+
+	NegocioDto modificaNegocio(String idNegocio, NegocioDto cuentaDto);
+
+	void borrarNegocio(String idNegocio);
+	List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual,double radio);
+
 	/*
 	 * Remotos
 	 */
 	List<NegocioDto> obtenerAllNegociosByCuenta(String idCuenta);
+
 	List<OfertaDto> obtenerAllOfertasByNegocio(String idNegocio);
 
+	List<NegocioDto> obtenerNegociosByAccion(Integer idAccion);
+	
 }

@@ -1,5 +1,6 @@
 package com.hazloakki.negocio.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.hazloakki.negocio.repository.NegocioRepository;
 import com.hazloakki.negocio.repository.NegocioTarjetasPagoRepository;
 import com.hazloakki.negocio.repository.ServiciosNegocioRepository;
 import com.hazloakki.negocio.service.remotos.OfertaDto;
+import com.hazloakki.negocio.service.remotos.OfertasNegociosApiClient;
 
 /**
  * @author Jovani Arzate 2018-07-01 HazloAkki para Empresas v.1
@@ -26,8 +28,8 @@ public class NegocioServiceImpl implements NegocioService {
 
 	@Autowired
 	private NegocioRepository negocioRepository;
-	// @Autowired
-	// private OfertasNegociosApiClient ofertasNegociosApiClient;
+	@Autowired
+	private OfertasNegociosApiClient ofertasNegociosApiClient;
 	@Autowired
 	private ServiciosNegocioRepository negocioServiciosRepository;
 	@Autowired
@@ -123,17 +125,17 @@ public class NegocioServiceImpl implements NegocioService {
 	@Transactional
 	@Override
 	public void borrarNegocio(String idNegocio) {
-		
+
 		NegocioDto negocioDto = negocioRepository.findById(idNegocio);
 
 		if (negocioDto == null) {
 			throw new NegocioException("El negocio seleccionado no esta registrado : " + idNegocio, idNegocio);
 		}
-		
+
 		negocioServiciosRepository.eliminar(idNegocio);
 		negocioMetodoPagoRepository.eliminar(idNegocio);
 		negocioTarjetasPagoRepository.eliminar(idNegocio);
-		
+
 		negocioRepository.eliminarByIdNegocio(idNegocio);
 
 	}
@@ -147,8 +149,80 @@ public class NegocioServiceImpl implements NegocioService {
 	@Override
 	public List<OfertaDto> obtenerAllOfertasByNegocio(String idNegocio) {
 
-		// return ofertasNegociosApiClient.obtenerOfertasByNegocio(idNegocio);
-		return null;
+		return ofertasNegociosApiClient.obtenerOfertasByNegocio(idNegocio);
+
+	}
+
+	@Override
+	public List<NegocioDto> obtenerNegociosByAccion(Integer idAccion) {
+
+		List<NegocioDto> listNegocios = negocioRepository.obtenerNegociosByIdAccionAndEstatus(idAccion, Boolean.TRUE);
+
+		if (listNegocios.isEmpty()) {
+			throw new NegocioException("No se encontro ningun negocio registrado", "0");
+		}
+
+		List<NegocioDto> listNegocio2 = new ArrayList<NegocioDto>();
+
+		for (NegocioDto negocioDto2 : listNegocios) {
+
+			List<ServiciosDto> dataServiciosNegocio = negocioServiciosRepository
+					.findServicios(negocioDto2.getIdNegocio());
+			List<MetodoPagoDto> dataMetodosPagoNegocio = negocioMetodoPagoRepository
+					.consultar(negocioDto2.getIdNegocio());
+			List<TipoTarjetaDto> dataTipoTarjetaNEgocio = negocioTarjetasPagoRepository
+					.findByIdNegocio(negocioDto2.getIdNegocio());
+
+			negocioDto2.setServiciosList(dataServiciosNegocio);
+			negocioDto2.setMetodoPagoList(dataMetodosPagoNegocio);
+			negocioDto2.setTipoTarjetaList(dataTipoTarjetaNEgocio);
+
+			listNegocio2.add(negocioDto2);
+		}
+
+		return listNegocio2;
+	}
+
+	@Override
+	public List<NegocioDto> obtenerAllNegocios() {
+
+		List<NegocioDto> listNegocio = negocioRepository.findAllNegociosByEstatus(Boolean.TRUE);
+		if (listNegocio.isEmpty()) {
+			throw new NegocioException("No se encontro ningun negocio registrado", "0");
+		}
+
+		List<NegocioDto> listNegocio2 = new ArrayList<NegocioDto>();
+
+		for (NegocioDto negocioDto2 : listNegocio) {
+
+			List<ServiciosDto> dataServiciosNegocio = negocioServiciosRepository
+					.findServicios(negocioDto2.getIdNegocio());
+			List<MetodoPagoDto> dataMetodosPagoNegocio = negocioMetodoPagoRepository
+					.consultar(negocioDto2.getIdNegocio());
+			List<TipoTarjetaDto> dataTipoTarjetaNEgocio = negocioTarjetasPagoRepository
+					.findByIdNegocio(negocioDto2.getIdNegocio());
+
+			negocioDto2.setServiciosList(dataServiciosNegocio);
+			negocioDto2.setMetodoPagoList(dataMetodosPagoNegocio);
+			negocioDto2.setTipoTarjetaList(dataTipoTarjetaNEgocio);
+
+			listNegocio2.add(negocioDto2);
+		}
+		return listNegocio2;
+	}
+
+	@Override
+	public List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual,double radio) {
+
+		List<NegocioDto> negocioDtos  = negocioRepository.findAllNegociosByNearbyAndEstatusAndHorario(latitudActual, longitudActual, radio,Boolean.TRUE);
+		
+		if (negocioDtos.isEmpty()) {
+			throw new NegocioException("No se encontro ningun negocio registrado", "0");
+		}
+		
+		
+		
+		return negocioDtos;
 	}
 
 }
