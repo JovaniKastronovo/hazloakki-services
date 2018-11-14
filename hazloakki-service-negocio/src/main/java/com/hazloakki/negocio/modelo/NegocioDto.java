@@ -32,6 +32,7 @@ public class NegocioDto {
 	private List<TipoTarjetaDto> tipoTarjetaList = new ArrayList<>();
 	private Integer idAccion;
 	private String sitioWeb;
+	private List<HorarioNegocioDto> horarioNegocio = new ArrayList<>();
 
 	public String getIdNegocio() {
 		return idNegocio;
@@ -216,5 +217,15 @@ public class NegocioDto {
 	public void setSitioWeb(String sitioWeb) {
 		this.sitioWeb = sitioWeb;
 	}
+
+	public List<HorarioNegocioDto> getHorarioNegocio() {
+		return horarioNegocio;
+	}
+
+	public void setHorarioNegocio(List<HorarioNegocioDto> horarioNegocio) {
+		this.horarioNegocio = horarioNegocio;
+	}
+	
+	
 
 }

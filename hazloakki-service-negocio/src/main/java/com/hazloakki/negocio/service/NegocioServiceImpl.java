@@ -1,5 +1,7 @@
 package com.hazloakki.negocio.service;
 
+import static org.mockito.Matchers.booleanThat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hazloakki.negocio.api.NegocioException;
+import com.hazloakki.negocio.modelo.HorarioNegocioDto;
 import com.hazloakki.negocio.modelo.MetodoPagoDto;
 import com.hazloakki.negocio.modelo.NegocioDto;
 import com.hazloakki.negocio.modelo.ServiciosDto;
 import com.hazloakki.negocio.modelo.TipoTarjetaDto;
+import com.hazloakki.negocio.repository.HorariosNegocioRepository;
 import com.hazloakki.negocio.repository.NegocioMetodoPagoRepository;
 import com.hazloakki.negocio.repository.NegocioRepository;
 import com.hazloakki.negocio.repository.NegocioTarjetasPagoRepository;
@@ -36,6 +40,11 @@ public class NegocioServiceImpl implements NegocioService {
 	private NegocioMetodoPagoRepository negocioMetodoPagoRepository;
 	@Autowired
 	private NegocioTarjetasPagoRepository negocioTarjetasPagoRepository;
+	@Autowired
+	private HorariosNegocioRepository horariosNegocioRepository;
+
+	
+	
 
 	@Transactional
 	@Override
@@ -61,6 +70,16 @@ public class NegocioServiceImpl implements NegocioService {
 			for (TipoTarjetaDto tipoTarjetaDto : negocioDto.getTipoTarjetaList()) {
 				negocioTarjetasPagoRepository.guardar(idNegocio, tipoTarjetaDto.getId());
 			}
+			
+			/*
+			 * Horario del negocio por dia
+			 */
+			
+			for (HorarioNegocioDto horarioNegocioDto : negocioDto.getHorarioNegocio()) {
+				horariosNegocioRepository.save(idNegocio, horarioNegocioDto.getIdDia(),
+						horarioNegocioDto.getHorarioInicial(), horarioNegocioDto.getHorarioFinal(), Boolean.TRUE);
+			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,10 +100,12 @@ public class NegocioServiceImpl implements NegocioService {
 		List<ServiciosDto> dataServiciosNegocio = negocioServiciosRepository.findServicios(idNegocio);
 		List<MetodoPagoDto> dataMetodosPagoNegocio = negocioMetodoPagoRepository.consultar(idNegocio);
 		List<TipoTarjetaDto> dataTipoTarjetaNEgocio = negocioTarjetasPagoRepository.findByIdNegocio(idNegocio);
+		List<HorarioNegocioDto> listHorarios = horariosNegocioRepository.findHorarioNegocioByEstatus(idNegocio, Boolean.TRUE);
 
 		negocioDto.setServiciosList(dataServiciosNegocio);
 		negocioDto.setMetodoPagoList(dataMetodosPagoNegocio);
 		negocioDto.setTipoTarjetaList(dataTipoTarjetaNEgocio);
+		negocioDto.setHorarioNegocio(listHorarios);
 
 		return negocioDto;
 	}
@@ -220,7 +241,15 @@ public class NegocioServiceImpl implements NegocioService {
 			throw new NegocioException("No se encontro ningun negocio registrado", "0");
 		}
 		
-		
+		for (NegocioDto negocioDto : negocioDtos) {
+
+			List<HorarioNegocioDto> horarioNegocioDtos = horariosNegocioRepository
+					.findHorarioNegocioByEstatus(negocioDto.getIdNegocio(), Boolean.TRUE);
+			
+		}
+		/*
+		 * Obtener dia y hora de consulta
+		 */
 		
 		return negocioDtos;
 	}
