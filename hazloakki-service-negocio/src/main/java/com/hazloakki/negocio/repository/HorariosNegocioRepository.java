@@ -12,6 +12,5 @@ public interface HorariosNegocioRepository {
 
 	void delete(String idNegocio);
 
-	List<HorarioNegocioDto> findNegociosAbiertos(String idNegocio, String horaActual,
-			String idDia);
+	HorarioNegocioDto findNegocioAbierto(String idNegocio, String horaActual, Integer idDia);
 }

@@ -2,6 +2,7 @@ package com.hazloakki.negocio.repository;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -17,9 +18,10 @@ public class HorariosNegocioRepositoryImpl extends SpringJdbcDao implements Hora
 	private String qrySelectByNegocioAndEstatus = "SELECT * FROM negocio_horario WHERE ID_NEGOCIO = ? AND ESTATUS = ?";
 	private String qryDeleteNegocios = "DELETE FROM negocio_horario WHERE ID_NEGOCIO = ?";
 
-	private String qrySelectNegociosAbiertos = "select * from negocio_horario a" + "where a.id_dia = ?"
-			+ "and (TO_TIMESTAMP(?, 'HH24:MI:SS')::TIME >= a.horario_inicial OR "
-			+ "TO_TIMESTAMP(?, 'HH24:MI:SS')::TIME <= a.horario_final)";
+	private String qrySelectNegociosAbiertos = "select * from negocio_horario a " + 
+			"where a.id_negocio = ? and a.id_dia = ? " + 
+			"and (TO_TIMESTAMP(?, 'HH24:MI:SS')::TIME >= a.horario_inicial OR " + 
+			"TO_TIMESTAMP(?, 'HH24:MI:SS')::TIME <= a.horario_final) ";
 
 	@Override
 	public List<HorarioNegocioDto> findHorarioNegocioByEstatus(String idNegocio, boolean estatus) {
@@ -39,10 +41,15 @@ public class HorariosNegocioRepositoryImpl extends SpringJdbcDao implements Hora
 	}
 
 	@Override
-	public List<HorarioNegocioDto> findNegociosAbiertos(String idNegocio, String horaActual, String idDia) {
-		return jdbcTemplate.query(qrySelectNegociosAbiertos,
-				new Object[] { idNegocio, idDia, horaActual, horaActual },
-				BeanPropertyRowMapper.newInstance(HorarioNegocioDto.class));
+	public HorarioNegocioDto findNegocioAbierto(String idNegocio, String horaActual, Integer idDia) {
+		try {
+
+			return jdbcTemplate.queryForObject(qrySelectNegociosAbiertos,
+					new Object[] { idNegocio, idDia, horaActual, horaActual },
+					BeanPropertyRowMapper.newInstance(HorarioNegocioDto.class));
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 }

@@ -87,10 +87,14 @@ public class NegocioController {
 		return negocioService.obtenerNegociosByAccion(Integer.parseInt(idAccion));
 	}
 	
-	@GetMapping("/{latitud}/{longitud}/{distancia}")
-	public List<NegocioDto> obtenerNegociosCercanos(@PathVariable ("latitud")String latitud, @PathVariable ("longitud")String longitud,@PathVariable ("distancia") String radio) {
+
+	@GetMapping("/{latitud}/{longitud}/{distancia}/{estatus}")
+	public List<NegocioDto> obtenerNegociosCriteria(@PathVariable("latitud") String latitud,
+			@PathVariable("longitud") String longitud, @PathVariable("distancia") String radio,
+			@PathVariable("estatus") String estatusNegocio) {
+		
 		return negocioService.obtenerNegociosByNearby(Double.parseDouble(latitud), Double.parseDouble(longitud),
-				Double.parseDouble(radio));
+				Double.parseDouble(radio),estatusNegocio);
 	}
 	
 	/*

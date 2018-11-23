@@ -1,10 +1,13 @@
 package com.hazloakki.negocio.service;
 
-import static org.mockito.Matchers.booleanThat;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +45,7 @@ public class NegocioServiceImpl implements NegocioService {
 	private NegocioTarjetasPagoRepository negocioTarjetasPagoRepository;
 	@Autowired
 	private HorariosNegocioRepository horariosNegocioRepository;
+	private static Logger log = Logger.getLogger(NegocioServiceImpl.class);
 
 	
 	
@@ -233,25 +237,54 @@ public class NegocioServiceImpl implements NegocioService {
 	}
 
 	@Override
-	public List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual,double radio) {
+	public List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual, double radio,
+			String estatusNegocio) {
 
-		List<NegocioDto> negocioDtos  = negocioRepository.findAllNegociosByNearbyAndEstatusAndHorario(latitudActual, longitudActual, radio,Boolean.TRUE);
-		
-		if (negocioDtos.isEmpty()) {
+		List<NegocioDto> negocioCercanos = negocioRepository.findAllNegociosByNearbyAndEstatusAndHorario(latitudActual,
+				longitudActual, radio, Boolean.TRUE);
+
+		List<NegocioDto> negocioCercanosYAbiertos = new ArrayList<>();
+
+		if (negocioCercanos.isEmpty()) {
 			throw new NegocioException("No se encontro ningun negocio registrado", "0");
 		}
-		
-		for (NegocioDto negocioDto : negocioDtos) {
+		log.info("Negocios Cercanos: " + negocioCercanos.size());
 
-			List<HorarioNegocioDto> horarioNegocioDtos = horariosNegocioRepository
-					.findHorarioNegocioByEstatus(negocioDto.getIdNegocio(), Boolean.TRUE);
-			
+		if (estatusNegocio.equals("abierto")) {
+			log.info("Buscando negocios abiertos...");
+
+			for (NegocioDto negocioDto : negocioCercanos) {
+
+				HorarioNegocioDto horarioNegocioDto = horariosNegocioRepository
+						.findNegocioAbierto(negocioDto.getIdNegocio(), horaActual(), diaSemana());
+
+				if (horarioNegocioDto != null) {
+					negocioCercanosYAbiertos.add(negocioDto);
+				}
+
+			}
+			return negocioCercanosYAbiertos;
+
 		}
-		/*
-		 * Obtener dia y hora de consulta
-		 */
-		
-		return negocioDtos;
+
+		return negocioCercanos;
+	}
+
+	public static Integer diaSemana() {
+
+		java.util.Date fechaC = new Date();
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(fechaC);
+
+		return cal.get(Calendar.DAY_OF_WEEK);
+	}
+
+	public String horaActual() {
+
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+		return sdf.format(cal.getTime());
 	}
 
 }

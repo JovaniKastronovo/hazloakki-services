@@ -104,13 +104,13 @@ descripcion varchar(255) DEFAULT NULL,
 estatus BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(1,'lunes','lunes',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(2,'martes','martes',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(3,'miercoles','miercoles',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(4,'jueves','jueves',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(5,'viernes','viernes',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(6,'sabado','sabado',true);
-insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(7,'domingo','domingo',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(2,'lunes','lunes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(3,'martes','martes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(4,'miercoles','miercoles',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(5,'jueves','jueves',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(6,'viernes','viernes',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(7,'sabado','sabado',true);
+insert into cat_dias(id_dia, nombre, descripcion, estatus) VALUES(1,'domingo','domingo',true);
 
 
 CREATE TABLE negocio_horario(

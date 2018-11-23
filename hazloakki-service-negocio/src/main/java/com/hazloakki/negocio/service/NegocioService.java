@@ -22,7 +22,8 @@ public interface NegocioService {
 	NegocioDto modificaNegocio(String idNegocio, NegocioDto cuentaDto);
 
 	void borrarNegocio(String idNegocio);
-	List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual,double radio);
+	List<NegocioDto> obtenerNegociosByNearby(double latitudActual, double longitudActual,double radio,String estatusNegocio);
+	
 
 	/*
 	 * Remotos
