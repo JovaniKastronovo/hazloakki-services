@@ -7,7 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 @SpringBootApplication //(exclude = { DataSourceAutoConfiguration.class })
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 @EnableFeignClients
 public class CuentaApplication {
 

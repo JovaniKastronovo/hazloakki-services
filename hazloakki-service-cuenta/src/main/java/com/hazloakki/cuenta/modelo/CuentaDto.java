@@ -9,9 +9,14 @@ public class CuentaDto {
 	private String idCuenta;
 	private String nombre;
 	private String apellidos;
+	private String nombreUsuario;
 	private String email;
 	private String telefono;
 	private String password;
+	private String fechaNacimiento;
+	private String sexo;
+	private String tipoUsuario;
+	private String terminosCondiciones;
 	private String fecha;
 	private boolean estatus;
 
@@ -77,6 +82,46 @@ public class CuentaDto {
 
 	public void setEstatus(boolean estatus) {
 		this.estatus = estatus;
+	}
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+
+	public String getTerminosCondiciones() {
+		return terminosCondiciones;
+	}
+
+	public void setTerminosCondiciones(String terminosCondiciones) {
+		this.terminosCondiciones = terminosCondiciones;
 	}
 
 }

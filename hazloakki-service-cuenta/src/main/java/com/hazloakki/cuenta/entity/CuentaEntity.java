@@ -26,23 +26,22 @@ public class CuentaEntity {
 	private String apellidos;
 	private String password;
 	private String email;
-	private String telefono;
+	@Column(name = "nombre_usuario")
+	private String nombreUsuario;
+	@Column(name = "fecha_nacimiento")
+	private String fechaNacimiento;
+	private String sexo;
+	@Column(name = "tipo_usuario")
+	private String tipoUsuario;
+	@Column(name = "terminos_condiciones")
+	private String terminosCondiciones;
 	private String fecha;
 	private boolean estatus;
-	
+	private String telefono;
 
 	public static CuentaEntity from(CuentaDto cuentaDto) {
 
 		CuentaEntity cuentaEntity = new CuentaEntity();
-		// return CuentaEntity.builder()
-		/*
-		 * .idCuenta(cuentaDto.getIdCuenta()); .nombre(cuentaDto.getNombre());
-		 * .apellidos(cuentaDto.getApellidos()); .email(cuentaDto.getEmail());
-		 * .password(cuentaDto.getPassword()); .telefono(cuentaDto.getTelefono());
-		 * .estatus(cuentaDto.isEstatus());
-		 * .fecha(cuentaDto.getFechaCreacion()).build();
-		 */
-
 		cuentaEntity.setId(cuentaDto.getIdCuenta());
 		cuentaEntity.setNombre(cuentaDto.getNombre());
 		cuentaEntity.setApellidos(cuentaDto.getApellidos());
@@ -51,12 +50,16 @@ public class CuentaEntity {
 		cuentaEntity.setTelefono(cuentaDto.getTelefono());
 		cuentaEntity.setEstatus(cuentaDto.isEstatus());
 		cuentaEntity.setFecha(cuentaDto.getFecha());
+		cuentaEntity.setFechaNacimiento(cuentaDto.getFechaNacimiento());
+		cuentaEntity.setSexo(cuentaDto.getSexo());
+		cuentaEntity.setTerminosCondiciones(cuentaDto.getTerminosCondiciones());
+		cuentaEntity.setTipoUsuario(cuentaDto.getTipoUsuario());
+		cuentaEntity.setNombreUsuario(cuentaDto.getNombreUsuario());
 
 		return cuentaEntity;
 	}
 
 	public CuentaDto to() {
-
 
 		CuentaDto cuentaDto = new CuentaDto();
 		cuentaDto.setIdCuenta(getId());
@@ -67,6 +70,11 @@ public class CuentaEntity {
 		cuentaDto.setTelefono(getTelefono());
 		cuentaDto.setEstatus(isEstatus());
 		cuentaDto.setFecha(getFecha());
+		cuentaDto.setFechaNacimiento(getFechaNacimiento());
+		cuentaDto.setSexo(getSexo());
+		cuentaDto.setTerminosCondiciones(getTerminosCondiciones());
+		cuentaDto.setTipoUsuario(getTipoUsuario());
+		cuentaDto.setNombreUsuario(getNombreUsuario());
 
 		return cuentaDto;
 
@@ -134,6 +142,46 @@ public class CuentaEntity {
 
 	public void setEstatus(boolean estatus) {
 		this.estatus = estatus;
+	}
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+
+	public String getTerminosCondiciones() {
+		return terminosCondiciones;
+	}
+
+	public void setTerminosCondiciones(String terminosCondiciones) {
+		this.terminosCondiciones = terminosCondiciones;
 	}
 
 }
